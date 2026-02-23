@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bin - Noxxy</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebars()"></div>
+
+    <div class="app-container">
+        <!-- Left Sidebar: Deleted Notes List -->
+        <aside class="notes-sidebar" id="notes-sidebar">
+            <div class="sidebar-header">
+                <h2>🗑️ Noxxy Bin</h2>
+            </div>
+
+            <div class="bin-warning">
+                ⚠️ Permanently deleted notes cannot be recovered
+            </div>
+
+            <div class="notes-list-container">
+                <ul id="bin-list" class="notes-list-compact">
+                    <div class="spinner"></div>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content: Note Detail -->
+        <main class="note-detail">
+            <!-- Mobile Header -->
+            <div class="mobile-header">
+                <button class="hamburger-btn" id="left-menu-btn" onclick="toggleLeftSidebar()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <div class="mobile-header-title">🗑️ Noxxy Bin</div>
+                <button class="hamburger-btn" id="right-menu-btn" onclick="toggleRightSidebar()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+
+            <div id="note-detail-content" class="note-detail-empty">
+                <div class="empty-state">
+                    <div class="empty-state-icon">🗑️</div>
+                    <h3>Deleted Notes</h3>
+                    <p>Select a note to restore or permanently delete</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar: Folders, Bin, User -->
+        <aside class="right-sidebar" id="right-sidebar">
+            <div class="sidebar-section">
+                <h3>FOLDERS</h3>
+                <ul id="folder-list" class="folder-list">
+                    <!-- Folders will be loaded here -->
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>SYSTEM</h3>
+                <ul class="system-list">
+                    <li class="system-item" onclick="window.location.href='/'">
+                        <span>📋 All Notes</span>
+                    </li>
+                    <li class="system-item active">
+                        <span>🗑️ Bin</span>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
+

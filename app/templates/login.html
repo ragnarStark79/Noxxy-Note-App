@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Noxxy</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #FAF8F3 0%, #F5F2ED 100%);
+            padding: var(--space-2xl);
+        }
+
+        .auth-card {
+            background: var(--surface-card);
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-modal);
+            border: 1px solid var(--border-light);
+            width: 100%;
+            max-width: 440px;
+            padding: var(--space-3xl);
+            animation: scaleIn var(--duration-slow) var(--ease-spring);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: var(--space-3xl);
+        }
+
+        .auth-logo {
+            font-size: 48px;
+            margin-bottom: var(--space-lg);
+        }
+
+        .auth-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+            letter-spacing: -0.02em;
+        }
+
+        .auth-subtitle {
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xl);
+        }
+
+        .auth-link {
+            text-align: center;
+            margin-top: var(--space-2xl);
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .auth-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color var(--duration-fast) var(--ease-out);
+        }
+
+        .auth-link a:hover {
+            color: var(--primary-hover);
+        }
+
+        .flash-messages {
+            position: fixed;
+            top: var(--space-2xl);
+            right: var(--space-2xl);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+            max-width: 400px;
+        }
+
+        .flash-message {
+            padding: var(--space-lg) var(--space-xl);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-floating);
+            animation: slideInUp var(--duration-slow) var(--ease-spring);
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .flash-message.success {
+            background: var(--success);
+            color: white;
+        }
+
+        .flash-message.error {
+            background: var(--danger);
+            color: white;
+        }
+
+        .flash-message.warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                padding: var(--space-lg);
+            }
+
+            .auth-card {
+                padding: var(--space-2xl);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        <span>{{ message }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo">📝</div>
+                <h1 class="auth-title">Welcome to Noxxy</h1>
+                <p class="auth-subtitle">Sign in to your account</p>
+            </div>
+
+            <form method="POST" action="{{ url_for('auth.login') }}" class="auth-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        required 
+                        autofocus
+                        placeholder="your@email.com"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required
+                        placeholder="Enter your password"
+                    >
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Sign In
+                </button>
+            </form>
+
+            <div class="auth-link">
+                Don't have an account? <a href="{{ url_for('auth.register') }}">Create one</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-hide flash messages after 5 seconds
+        setTimeout(() => {
+            const flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(msg => {
+                msg.style.animation = 'fadeOut 0.3s ease-out forwards';
+                setTimeout(() => msg.remove(), 300);
+            });
+        }, 5000);
+    </script>
+</body>
+</html>

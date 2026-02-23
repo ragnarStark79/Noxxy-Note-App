@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noxxy</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebars()"></div>
+
+    <div class="app-container">
+        <!-- Left Sidebar: Notes List -->
+        <aside class="notes-sidebar" id="notes-sidebar">
+            <!-- Mobile Close Button -->
+            <button class="sidebar-close-btn" id="left-sidebar-close" onclick="closeLeftSidebar()" aria-label="Close sidebar">
+                ✕
+            </button>
+            
+            <div class="sidebar-header">
+                <h2>📝 Noxxy</h2>
+                <button class="btn-icon" onclick="showCreateNoteModal()" title="New Note">
+                    <span style="font-size: 20px;">✏️</span>
+                </button>
+            </div>
+
+            <div class="notes-list-container">
+                <ul id="notes-list" class="notes-list-compact">
+                    <div class="spinner"></div>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content: Note Detail -->
+        <main class="note-detail">
+            <!-- Mobile Header -->
+            <div class="mobile-header">
+                <button class="hamburger-btn" id="left-menu-btn" onclick="toggleLeftSidebar()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <div class="mobile-header-title">📝 Noxxy</div>
+                <button class="hamburger-btn" id="right-menu-btn" onclick="toggleRightSidebar()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+
+            <div id="note-detail-content" class="note-detail-empty">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📝</div>
+                    <h3>Select a note</h3>
+                    <p>Choose a note from the list or create a new one</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar: Folders, Bin, User -->
+        <aside class="right-sidebar" id="right-sidebar">
+            <!-- Mobile Close Button -->
+            <button class="sidebar-close-btn" id="right-sidebar-close" onclick="closeRightSidebar()" aria-label="Close sidebar">
+                ✕
+            </button>
+            
+            <div class="sidebar-section">
+                <h3>FOLDERS</h3>
+                <ul id="folder-list" class="folder-list">
+                    <!-- Default "All Notes" folder -->
+                    <li class="folder-item active" id="all-notes-folder" onclick="selectFolder(null)">
+                        <div class="folder-item-content">
+                            <span>📋 All Notes</span>
+                        </div>
+                        <span class="folder-count" id="all-notes-count">0</span>
+                    </li>
+                    <!-- Custom folders will be loaded here -->
+                </ul>
+
+                <form id="folder-form" class="folder-form">
+                    <input type="text" name="folder_name" placeholder="New folder..." required>
+                    <button type="submit" class="btn-icon" title="Add Folder">+</button>
+                </form>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>SYSTEM</h3>
+                <ul class="system-list">
+                    <li class="system-item" onclick="window.location.href='/bin'">
+                        <span>🗑️ Bin</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>USER</h3>
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        {% if user.profile_photo_url %}
+                            <img src="{{ user.profile_photo_url }}" alt="{{ user.name }}" onerror="this.style.display='none';" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                        {% else %}
+                            {{ user.name[0].upper() }}
+                        {% endif %}
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">{{ user.name }}</div>
+                        <div class="user-profession">{{ user.profession }}</div>
+                    </div>
+                </div>
+                <ul class="system-list" style="margin-top: var(--space-md);">
+                    <li class="system-item" data-href="{{ url_for('auth.profile') }}">
+                        <span>⚙️ Settings</span>
+                    </li>
+                    <li class="system-item" data-href="{{ url_for('auth.logout') }}">
+                        <span>🚪 Logout</span>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Create Note Modal -->
+    <div id="create-note-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Create New Note</h2>
+                <button class="btn-icon" onclick="hideCreateNoteModal()">✕</button>
+            </div>
+            <form id="note-form">
+                <div class="form-group">
+                    <label for="title">Title *</label>
+                    <input type="text" id="title" name="title" required placeholder="Note title...">
+                </div>
+
+                <div class="form-group">
+                    <label for="content">Content</label>
+                    <textarea id="content" name="content" placeholder="Start writing..." rows="8"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="folder_id">Folder</label>
+                    <select id="folder-select" name="folder_id">
+                        <option value="">No Folder</option>
+                    </select>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="hideCreateNoteModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Note</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
+
